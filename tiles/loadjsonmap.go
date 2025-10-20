@@ -6,7 +6,6 @@ import (
 	"os"
 )
 
-// The json is storing a 2d array of strings
 type LevelData struct {
 	Tiles [][]string `json:"tiles"`
 }

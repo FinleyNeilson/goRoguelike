@@ -44,7 +44,7 @@ func (g *gameState) Draw(screen *ebiten.Image) {
 	mapToDraw.Draw(screen)
 }
 
-func (g *gameState) Layout(outsideWidth, outsideHeight int) (int, int) {
+func (g *gameState) Layout(_, _ int) (int, int) {
 	return internalWidth, internalHeight
 }
 
@@ -54,8 +54,8 @@ func main() {
 
 	sprites.LoadTilesheet(sprites.DefaultSheet())
 
-	game := newGame()
-	if err := ebiten.RunGame(game); err != nil {
+	Game := newGame()
+	if err := ebiten.RunGame(Game); err != nil {
 		log.Fatal(err)
 	}
 
