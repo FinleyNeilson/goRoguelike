@@ -15,9 +15,6 @@ const (
 	internalHeight = 240
 )
 
-// TODO: I think we have to move this to the game package Game logic requires 
-// access to game state to make sense make it make sense
-
 type gameState struct {
 	Map tiles.TileMap
 
@@ -30,14 +27,12 @@ func newGame() *gameState {
 	player := &game.Player{Tile: playerTile}
 
 	g := &gameState{
-		Map:       tiles.LoadTMJ("assets/level1.tmj"),
+		Map:       tiles.LoadTileMap("assets/level1.json"),
 		GameState: []*tiles.DynamicTile{playerTile},
 		Player:    player,
 	}
 	return g
 }
-
-// ---
 
 func (g *gameState) Update() error {
 	g.Player.Move()
