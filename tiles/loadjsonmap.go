@@ -18,16 +18,18 @@ func LoadTileMap(path string) TileMap {
 	}
 
 	// Create a tilemap of the appropriate size to load with json data
-	tm := TileMap{
+	tileMap := TileMap{
 		Tiles: make([]Tile, MapWidth*MapHeight),
 	}
+
+	// Create base tiles and place in tilemap
 	for y, row := range level.Tiles {
 		for x, name := range row {
 			tile := NewBaseTile(x, y, name)
-			tm.Set(tile)
+			tileMap.Place(tile)
 		}
 	}
-	return tm
+	return tileMap
 }
 
 func LoadJson(path string) (LevelData, error) {

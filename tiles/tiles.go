@@ -6,6 +6,7 @@ import (
 
 type Tile interface {
 	Draw(screen *ebiten.Image, tileSize int)
-	Position() (x, y int)
+	GetPosition() (x, y int)
+	GetObjectId() (id int)
 	SetPosition(x, y int)
 }

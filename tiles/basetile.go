@@ -2,24 +2,19 @@ package tiles
 
 import (
 	"log"
-	"roguelike/sprites"
+	"roguelike/utils"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type BaseTile struct {
-	X, Y  int
-	Image *ebiten.Image
-	Name  string
+	X, Y     int
+	Image    *ebiten.Image
+	Name     string
+	ObjectID int
 }
 
-func (t *BaseTile) Draw(screen *ebiten.Image, tileSize int) {
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(t.X*tileSize), float64(t.Y*tileSize))
-	screen.DrawImage(t.Image, op)
-}
-
-func (t BaseTile) Position() (int, int) {
+func (t *BaseTile) GetPosition() (int, int) {
 	return t.X, t.Y
 }
 
@@ -30,15 +25,26 @@ func (t *BaseTile) SetPosition(x, y int) {
 	}
 }
 
+func (t *BaseTile) GetObjectId() (id int) {
+	return t.ObjectID
+}
+
+func (t *BaseTile) Draw(screen *ebiten.Image, tileSize int) {
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(float64(t.X*tileSize), float64(t.Y*tileSize))
+	screen.DrawImage(t.Image, op)
+}
+
 func NewBaseTile(x, y int, spriteName string) Tile {
-	sprite := sprites.Get(spriteName)
+	sprite := Get(spriteName)
 	if sprite == nil {
 		log.Printf("sprite '%s' not found!", spriteName)
 	}
 	return &BaseTile{
-		X:     x,
-		Y:     y,
-		Image: sprite,
-		Name:  spriteName,
+		X:        x,
+		Y:        y,
+		Image:    sprite,
+		Name:     spriteName,
+		ObjectID: utils.UniqueID(),
 	}
 }

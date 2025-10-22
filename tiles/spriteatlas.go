@@ -1,4 +1,4 @@
-package sprites
+package tiles
 
 import (
 	"encoding/json"
@@ -34,7 +34,7 @@ func Get(name string) *ebiten.Image {
 	return spritesByName[name]
 }
 
-func LoadTilesheet(spriteSheet SpriteSheet) {
+func LoadTileSheet(spriteSheet SpriteSheet) {
 
 	file, err := os.Open(spriteSheet.path)
 	if err != nil {

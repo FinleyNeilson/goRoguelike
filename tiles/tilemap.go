@@ -17,42 +17,34 @@ type TileMap struct {
 }
 
 func (tm *TileMap) Get(x, y int) Tile {
-	return tm.Tiles[utils.Flatten(x, y, MapWidth)]
+	if x < 0 || x >= MapWidth || y < 0 || y >= MapHeight {
+		return nil
+	}
+
+	index := utils.Flatten(x, y, MapWidth)
+	return tm.Tiles[index]
 }
 
-func (tm *TileMap) Set(tile Tile) {
-	x, y := tile.Position()
+func (tm *TileMap) Place(tile Tile) {
+	x, y := tile.GetPosition()
 	tm.Tiles[utils.Flatten(x, y, MapWidth)] = tile
 }
 
-func (tm TileMap) Draw(screen *ebiten.Image) {
+func (tm *TileMap) Draw(screen *ebiten.Image) {
 	for _, tile := range tm.Tiles {
 		tile.Draw(screen, TileSize)
 	}
 }
 
-func (staticTileMap TileMap) Combine(dynamicEntities []*DynamicTile) TileMap {
-	resultTileMap := TileMap{
+func (tm *TileMap) Combine(dynamicEntities []*DynamicTile) *TileMap {
+	resultTileMap := &TileMap{
 		Tiles: make([]Tile, MapWidth*MapHeight),
 	}
-	copy(resultTileMap.Tiles, staticTileMap.Tiles)
+	copy(resultTileMap.Tiles, tm.Tiles)
 
 	for _, entity := range dynamicEntities {
-		resultTileMap.Set(entity)
+		resultTileMap.Place(entity)
 	}
 
 	return resultTileMap
-}
-
-func DefaultTileMap() TileMap {
-	tileMap := TileMap{
-		Tiles: make([]Tile, MapWidth*MapHeight),
-	}
-
-	for i := 0; i < MapWidth*MapHeight; i++ {
-		x, y := utils.Unflatten(i, MapWidth)
-		tileMap.Tiles[i] = NewBaseTile(x, y, "tree17")
-	}
-
-	return tileMap
 }
