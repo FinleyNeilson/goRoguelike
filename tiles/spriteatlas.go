@@ -71,6 +71,7 @@ func LoadTileSheet(spriteSheet SpriteSheet) {
 }
 
 func LoadSpriteMap(path string) (map[string]int, error) {
+	// Open sprite map
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err

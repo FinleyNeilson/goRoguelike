@@ -23,12 +23,14 @@ func LoadLevel(path string) (tiles.TileMap, map[int]GameObject) {
 			case strings.HasPrefix(baseTile.Name, "tree"):
 				tree := &StaticObject{
 					BaseGameObject: newBase(baseTile),
+					Name:           "tree",
 					Solid:          true,
 				}
 				objects[baseTile.GetObjectId()] = tree
 			case strings.HasPrefix(baseTile.Name, "ground"):
 				ground := &StaticObject{
 					BaseGameObject: newBase(baseTile),
+					Name:           "ground",
 					Solid:          false,
 				}
 				objects[baseTile.GetObjectId()] = ground

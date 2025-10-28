@@ -14,15 +14,19 @@ const (
 )
 
 func newGame() *game.GameState {
-	playerTile := tiles.NewDynamicTile(5, 5, "hero1")
+	playerTile := tiles.NewDynamicTile(5, 5, "hero2")
 	player := &game.Player{Tile: playerTile}
 
 	tileMap, gameObject := game.LoadLevel("assets/level1.json")
 
+	enemyObject := game.CreateDynamicObject()
+	gameObject[enemyObject.ObjectID] = enemyObject
+	enemyTile := enemyObject.GetTile()
+
 	g := &game.GameState{
 		LevelMap:     tileMap,
 		GameObjectID: gameObject,
-		DynamicTiles: []*tiles.DynamicTile{playerTile},
+		DynamicTiles: []*tiles.DynamicTile{playerTile, enemyTile},
 		Player:       player,
 	}
 	return g

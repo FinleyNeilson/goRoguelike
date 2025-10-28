@@ -42,9 +42,13 @@ func (player *Player) move(direction tiles.Direction, state *GameState) {
 
 	moveObject := state.GameObjectID[(moveTile.GetObjectId())]
 
-	if ground, ok := moveObject.(*StaticObject); ok && ground.isSolid() {
-		fmt.Println("You hit a tree")
-	} else {
-		player.Tile.Move(direction)
+	if staticObject, ok := moveObject.(*StaticObject); ok {
+		if staticObject.isSolid() {
+			fmt.Println("You hit a " + staticObject.getName())
+		} else {
+			player.Tile.Move(direction)
+		}
+	} else if dynamicObject, ok := moveObject.(*DynamicObject); ok {
+
 	}
 }

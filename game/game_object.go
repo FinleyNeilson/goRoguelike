@@ -2,30 +2,32 @@ package game
 
 import (
 	"roguelike/tiles"
-	"strconv"
 )
 
 type GameObject interface {
-	getId() string
+	getId() int
 	getName() string
+	onPlayerEnter() bool
 }
 
 type BaseGameObject struct {
-	ObjectID int
-	Tile     tiles.Tile
-}
-
-func (obj BaseGameObject) getId() string {
-	return strconv.Itoa(obj.ObjectID)
-}
-
-func (obj BaseGameObject) getName() string {
-	return "Default Name"
+	ObjectID   int
+	ObjectName string
+	Tile       tiles.Tile
 }
 
 func newBase(baseTile tiles.Tile) BaseGameObject {
 	return BaseGameObject{
-		Tile:     baseTile,
-		ObjectID: baseTile.GetObjectId(),
+		Tile:       baseTile,
+		ObjectID:   baseTile.GetObjectId(),
+		ObjectName: "Default Name",
 	}
+}
+
+func (obj *BaseGameObject) getId() int {
+	return obj.ObjectID
+}
+
+func (obj *BaseGameObject) getName() string {
+	return obj.ObjectName
 }
