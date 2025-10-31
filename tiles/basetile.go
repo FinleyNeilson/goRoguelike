@@ -14,25 +14,42 @@ type BaseTile struct {
 	ObjectID int
 }
 
-func (t *BaseTile) GetPosition() (int, int) {
-	return t.X, t.Y
+func (tile *BaseTile) GetPosition() (int, int) {
+	return tile.X, tile.Y
 }
 
-func (t *BaseTile) SetPosition(x, y int) {
+func (tile *BaseTile) SetPosition(x, y int) {
 	if x < MapWidth && y < MapHeight && x >= 0 && y >= 0 {
-		t.X = x
-		t.Y = y
+		tile.X = x
+		tile.Y = y
 	}
 }
 
-func (t *BaseTile) GetObjectId() (id int) {
-	return t.ObjectID
+func (tile *BaseTile) GetDistanceTo(other Tile) int {
+	otherX, otherY := other.GetPosition()
+	dx := absInt(tile.X - otherX)
+	dy := absInt(tile.Y - otherY)
+	if dx > dy {
+		return dx
+	}
+	return dy
 }
 
-func (t *BaseTile) Draw(screen *ebiten.Image, tileSize int) {
+func absInt(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+func (tile *BaseTile) GetObjectId() (id int) {
+	return tile.ObjectID
+}
+
+func (tile *BaseTile) Draw(screen *ebiten.Image, tileSize int) {
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(t.X*tileSize), float64(t.Y*tileSize))
-	screen.DrawImage(t.Image, op)
+	op.GeoM.Translate(float64(tile.X*tileSize), float64(tile.Y*tileSize))
+	screen.DrawImage(tile.Image, op)
 }
 
 func NewBaseTile(x, y int, spriteName string) *BaseTile {

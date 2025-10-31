@@ -1,6 +1,7 @@
 package game
 
 import (
+	"fmt"
 	"roguelike/tiles"
 	"roguelike/ui"
 
@@ -13,6 +14,7 @@ type GameState struct {
 	GameObjectID map[int]Object
 	InputState   *ui.InputState
 	Player       *Player
+	NewTurn      bool
 }
 
 func (state *GameState) currentTileMap() *tiles.TileMap {
@@ -20,12 +22,26 @@ func (state *GameState) currentTileMap() *tiles.TileMap {
 }
 
 func (state *GameState) Update() error {
+	state.NewTurn = false
 	ui.SetInputState(state.InputState)
 
-	if state.InputState.Move {
-		if state.Player.Move(state) {
+	// If space is pressed you do nothing for this turn
+	if state.InputState.Turn {
+		state.NewTurn = true
+	}
 
+	// Turn is set inside Player.Move function
+	if state.InputState.Move {
+		state.Player.Move(state)
+	}
+
+	if state.NewTurn {
+		for _, gameObject := range state.GameObjectID {
+			if dynamic, ok := gameObject.(*Dynamic); ok {
+				dynamic.TakeTurn(state)
+			}
 		}
+		fmt.Println("NewTurn")
 	}
 
 	return nil

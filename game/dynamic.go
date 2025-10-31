@@ -1,10 +1,12 @@
 package game
 
 import (
-	"fmt"
 	"roguelike/tiles"
+	"roguelike/ui"
 	"strconv"
 )
+
+//Maybe the names are bad should be entity? or enemy?
 
 type Dynamic struct {
 	Base
@@ -21,9 +23,17 @@ func (obj *Dynamic) GetTile() *tiles.DynamicTile {
 
 func (obj *Dynamic) OnAttack(player *Player) bool {
 	obj.health = obj.health - player.GetDamage()
-	fmt.Println("You just attacked " + obj.GetName())
-	fmt.Println(obj.GetName() + "'s Health is now: " + strconv.Itoa(obj.health))
+	ui.LogMessage("You just attacked " + obj.GetName())
+	ui.LogMessage(obj.GetName() + "'s Health is now: " + strconv.Itoa(obj.health))
 	return true
+}
+
+func (obj *Dynamic) TakeTurn(state *GameState) {
+	if obj.Tile.GetDistanceTo(state.Player.Tile) == 1 {
+		state.Player.TakeDamage(5)
+	}
+
+	ui.LogMessage("Im Death and im taking my turn")
 }
 
 func (obj *Dynamic) OnPlayerEnter(player *Player) bool {

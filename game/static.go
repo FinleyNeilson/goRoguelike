@@ -1,7 +1,7 @@
 package game
 
 import (
-	"fmt"
+	"roguelike/ui"
 )
 
 type Static struct {
@@ -15,7 +15,7 @@ func (obj Static) IsSolid() bool {
 
 func (obj Static) OnPlayerEnter(_ *Player) bool {
 	if obj.Solid {
-		fmt.Println("You hit a " + obj.GetName())
+		ui.LogMessage("You can't go that way theres a " + obj.GetName() + " in the way")
 		return false
 	}
 	return true
