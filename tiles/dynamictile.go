@@ -1,7 +1,7 @@
 package tiles
 
 type DynamicTile struct {
-	BaseTile
+	*BaseTile
 }
 
 func (t *DynamicTile) GetAdjacentTileXY(dir Direction) (int, int) {
@@ -15,11 +15,8 @@ func (t *DynamicTile) Move(dir Direction) {
 }
 
 func NewDynamicTile(x, y int, spriteName string) *DynamicTile {
+	baseTile := NewBaseTile(x, y, spriteName)
 	return &DynamicTile{
-		BaseTile: BaseTile{
-			X:     x,
-			Y:     y,
-			Image: Get(spriteName),
-		},
+		BaseTile: baseTile,
 	}
 }

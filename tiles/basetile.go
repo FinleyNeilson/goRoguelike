@@ -35,7 +35,7 @@ func (t *BaseTile) Draw(screen *ebiten.Image, tileSize int) {
 	screen.DrawImage(t.Image, op)
 }
 
-func NewBaseTile(x, y int, spriteName string) Tile {
+func NewBaseTile(x, y int, spriteName string) *BaseTile {
 	sprite := Get(spriteName)
 	if sprite == nil {
 		log.Printf("sprite '%s' not found!", spriteName)

@@ -2,6 +2,7 @@ package game
 
 import (
 	"roguelike/tiles"
+	"roguelike/ui"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -9,7 +10,8 @@ import (
 type GameState struct {
 	LevelMap     tiles.TileMap
 	DynamicTiles []*tiles.DynamicTile
-	GameObjectID map[int]GameObject
+	GameObjectID map[int]Object
+	InputState   *ui.InputState
 	Player       *Player
 }
 
@@ -18,7 +20,14 @@ func (state *GameState) currentTileMap() *tiles.TileMap {
 }
 
 func (state *GameState) Update() error {
-	state.Player.Move(state)
+	ui.SetInputState(state.InputState)
+
+	if state.InputState.Move {
+		if state.Player.Move(state) {
+
+		}
+	}
+
 	return nil
 }
 

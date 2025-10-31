@@ -3,52 +3,50 @@ package game
 import (
 	"fmt"
 	"roguelike/tiles"
-
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
 type Player struct {
-	Tile *tiles.DynamicTile
-	X, Y int
+	Tile   *tiles.DynamicTile
+	Damage int
 }
 
-func (player *Player) Move(state *GameState) {
-	state.currentTileMap()
-	switch {
-	case inpututil.IsKeyJustPressed(ebiten.KeyW):
-		player.move(tiles.Up, state)
-
-	case inpututil.IsKeyJustPressed(ebiten.KeyS):
-		player.move(tiles.Down, state)
-
-	case inpututil.IsKeyJustPressed(ebiten.KeyA):
-		player.move(tiles.Left, state)
-
-	case inpututil.IsKeyJustPressed(ebiten.KeyD):
-		player.move(tiles.Right, state)
-
-	default:
-		return
-	}
+func NewPlayer() *Player {
+	return &Player{}
 }
 
-func (player *Player) move(direction tiles.Direction, state *GameState) {
-	moveX, moveY := player.Tile.GetAdjacentTileXY(direction)
-	moveTile := state.currentTileMap().Get(moveX, moveY)
-	if moveTile == nil {
-		return
+func (player *Player) GetDamage() int {
+	return player.Damage
+}
+
+func (player *Player) Move(state *GameState) bool {
+	direction := state.InputState.Dir
+
+	// This can be improved
+	x, y := player.Tile.GetAdjacentTileXY(direction)
+	moveTile, ok := state.currentTileMap().Get(x, y)
+
+	if !ok {
+		fmt.Println("no no no, cant go there")
+		return false
 	}
 
 	moveObject := state.GameObjectID[(moveTile.GetObjectId())]
-
-	if staticObject, ok := moveObject.(*StaticObject); ok {
-		if staticObject.isSolid() {
-			fmt.Println("You hit a " + staticObject.getName())
-		} else {
-			player.Tile.Move(direction)
-		}
-	} else if dynamicObject, ok := moveObject.(*DynamicObject); ok {
-
+	if moveObject == nil {
+		return false
 	}
+
+	if _, ok := moveObject.(*Static); ok {
+		if moveObject.OnPlayerEnter(player) {
+			player.Tile.Move(direction)
+			return true
+		}
+	} else if dynamicObject, ok := moveObject.(*Dynamic); ok {
+		if dynamicObject.OnAttack(player) {
+			// I mean this is confusing change later, probably.
+			// It didn't actually move but its counted as a turn.
+			return true
+		}
+	}
+
+	return false
 }

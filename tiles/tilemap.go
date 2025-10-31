@@ -16,13 +16,13 @@ type TileMap struct {
 	Tiles []Tile
 }
 
-func (tm *TileMap) Get(x, y int) Tile {
+func (tm *TileMap) Get(x, y int) (Tile, bool) {
 	if x < 0 || x >= MapWidth || y < 0 || y >= MapHeight {
-		return nil
+		return nil, false
 	}
 
 	index := utils.Flatten(x, y, MapWidth)
-	return tm.Tiles[index]
+	return tm.Tiles[index], true
 }
 
 func (tm *TileMap) Place(tile Tile) {

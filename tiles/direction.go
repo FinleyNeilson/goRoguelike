@@ -3,7 +3,8 @@ package tiles
 type Direction int
 
 const (
-	Up Direction = iota
+	NoDirection Direction = iota
+	Up
 	UpRight
 	Right
 	DownRight
@@ -31,6 +32,8 @@ func (d Direction) Vector() (dx, dy int) {
 		return -1, 0
 	case UpLeft:
 		return -1, -1
+	case NoDirection:
+		return 0, 0
 	default:
 		return 0, 0
 	}

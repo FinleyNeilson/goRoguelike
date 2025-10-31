@@ -4,6 +4,7 @@ import (
 	"log"
 	"roguelike/game"
 	"roguelike/tiles"
+	"roguelike/ui"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -14,8 +15,8 @@ const (
 )
 
 func newGame() *game.GameState {
-	playerTile := tiles.NewDynamicTile(5, 5, "hero2")
-	player := &game.Player{Tile: playerTile}
+	playerTile := tiles.NewDynamicTile(9, 10, "hero2")
+	player := &game.Player{Tile: playerTile, Damage: 5}
 
 	tileMap, gameObject := game.LoadLevel("assets/level1.json")
 
@@ -23,11 +24,14 @@ func newGame() *game.GameState {
 	gameObject[enemyObject.ObjectID] = enemyObject
 	enemyTile := enemyObject.GetTile()
 
+	inputState := ui.NewInputState()
+
 	g := &game.GameState{
 		LevelMap:     tileMap,
 		GameObjectID: gameObject,
 		DynamicTiles: []*tiles.DynamicTile{playerTile, enemyTile},
 		Player:       player,
+		InputState:   inputState,
 	}
 	return g
 }
