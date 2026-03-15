@@ -1,3 +1,3 @@
-![demo](demo.png)
-
 In progress.
+
+![demo](demo.png)
