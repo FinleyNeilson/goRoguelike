@@ -6,29 +6,27 @@ import (
 	"strconv"
 )
 
-//Maybe the names are bad should be entity? or enemy?
-
-type Dynamic struct {
+type Entity struct {
 	Base
 	health  int
 	IsEnemy bool
 }
 
-func (obj *Dynamic) GetTile() *tiles.DynamicTile {
+func (obj *Entity) GetTile() *tiles.DynamicTile {
 	if tile, ok := obj.Tile.(*tiles.DynamicTile); ok {
 		return tile
 	}
 	return nil
 }
 
-func (obj *Dynamic) OnAttack(player *Player) bool {
+func (obj *Entity) OnAttack(player *Player) bool {
 	obj.health = obj.health - player.GetDamage()
 	ui.LogMessage("You just attacked " + obj.GetName())
 	ui.LogMessage(obj.GetName() + "'s Health is now: " + strconv.Itoa(obj.health))
 	return true
 }
 
-func (obj *Dynamic) TakeTurn(state *GameState) {
+func (obj *Entity) TakeTurn(state *GameState) {
 	if obj.Tile.GetDistanceTo(state.Player.Tile) == 1 {
 		state.Player.TakeDamage(5)
 	}
@@ -36,15 +34,15 @@ func (obj *Dynamic) TakeTurn(state *GameState) {
 	ui.LogMessage("Im Death and im taking my turn")
 }
 
-func (obj *Dynamic) OnPlayerEnter(player *Player) bool {
+func (obj *Entity) OnPlayerEnter(player *Player) bool {
 	return false
 }
 
-func CreateDynamicObject() *Dynamic {
+func CreateDynamicObject() *Entity {
 	tile := tiles.NewDynamicTile(10, 10, "monster9")
 
 	baseGameObject := NewBase(tile, "Death")
-	dynamicObject := &Dynamic{
+	dynamicObject := &Entity{
 		Base:    baseGameObject,
 		health:  100,
 		IsEnemy: true}

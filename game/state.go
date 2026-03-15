@@ -37,7 +37,7 @@ func (state *GameState) Update() error {
 
 	if state.NewTurn {
 		for _, gameObject := range state.GameObjectID {
-			if dynamic, ok := gameObject.(*Dynamic); ok {
+			if dynamic, ok := gameObject.(*Entity); ok {
 				dynamic.TakeTurn(state)
 			}
 		}

@@ -55,7 +55,7 @@ func (player *Player) Move(state *GameState) bool {
 			state.NewTurn = true
 			return true
 		}
-	} else if dynamicObject, ok := moveObject.(*Dynamic); ok {
+	} else if dynamicObject, ok := moveObject.(*Entity); ok {
 		if dynamicObject.OnAttack(player) {
 			state.NewTurn = true
 			return false

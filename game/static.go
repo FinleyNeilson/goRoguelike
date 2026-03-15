@@ -6,15 +6,15 @@ import (
 
 type Static struct {
 	Base
-	Solid bool
+	Walkable bool
 }
 
-func (obj Static) IsSolid() bool {
-	return obj.Solid
+func (obj Static) IsWalkable() bool {
+	return obj.Walkable
 }
 
 func (obj Static) OnPlayerEnter(_ *Player) bool {
-	if obj.Solid {
+	if !obj.Walkable {
 		ui.LogMessage("You can't go that way theres a " + obj.GetName() + " in the way")
 		return false
 	}
